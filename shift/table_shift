@@ -1,21 +1,8 @@
 #!/bin/bash
-set -euo pipefail
-IFS=$'\n\t'
 
-. ../common.sh
+#. ../common.sh
 
-function shift::createTmpDir {
-    mktemp -d -t tmp.XXXXXXXXXX
-}
-
-readonly TMPDIR=$(createTmpDir)
-function shift::cleanup {
-  rm -rf "$TMPDIR"
-}
-trap shift::cleanup EXIT
-
-
-shift::generate_mapping() {
+generate_mapping() {
   local input="$1"
   local delimiter="$2"
   local key_collumns="$3"

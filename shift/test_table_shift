@@ -1,0 +1,67 @@
+#!/bin/bash
+
+. ./table_shift.sh
+
+##############################
+
+
+test_should_prepare_mapping() {
+
+  # given
+  input="
+a:b:1
+a:c:2
+a:b:3
+b:c:4
+a:c:5
+d:e:6
+"
+
+
+  # when
+  actual=$(generate_mapping "$input" ":" "1,2")
+
+
+  # then
+  expected="a:b => :
+a:c => ::
+b:c => :::
+d:e => ::::"
+  assertEquals "$expected" "$actual"
+}
+
+
+#test_should_generate_header() {
+#
+#}
+
+
+test_should_shift_collumns() {
+
+  input="
+a:b:1
+a:c:2
+a:b:3
+b:c:4
+a:c:5
+d:e:6
+"
+
+  expected="
+a:b::1
+a:c:::2
+a:b::3
+b:c::::4
+a:c:::5
+d:e:::::6
+"
+
+
+#  f "$input"
+#  echo "$input"
+#  echo "$expected"
+#  assertEquals "$expected" "$expected"
+}
+
+. shunit2
+
