@@ -21,7 +21,22 @@ generate_mapping() {
 }
 
 generate_header() {
-  echo ":::a_b:a_c:b_c:d_e"
+  local input="$1"
+  local delimiter="$2"
+  local key_collumns="$3"
+  mapping=$(generate_mapping "$input" "$delimiter" "$key_collumns")
+#  echo "$mapping" >&2
+  last_key_collumn=$(echo "$key_collumns" | rev | cut -d"," -f1 | rev)
+  
+  for (( i=1; i<=last_key_collumn; i++))
+  do
+	printf "%s" "$delimiter"
+  done
+  
+  while IFS= read -r key_mapping ; do
+    key=$(echo "$key_mapping" | cut -d" " -f1 | sed "s/$delimiter/_/g")
+    printf "%s%s" "${delimiter}${key}"
+  done <<< "$mapping"
 }
 
 
