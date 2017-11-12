@@ -26,12 +26,14 @@ generate_header() {
   local key_collumns="$3"
   mapping=$(generate_mapping "$input" "$delimiter" "$key_collumns")
 #  echo "$mapping" >&2
-  last_key_collumn=$(echo "$key_collumns" | rev | cut -d"," -f1 | rev)
+  first_key_collumn=$(echo "$key_collumns" | cut -d"," -f1 )
   
-  for (( i=1; i<=last_key_collumn; i++))
+  for (( i=1; i<first_key_collumn; i++))
   do
 	printf "%s" "$delimiter"
   done
+  
+  printf "%s" "$delimiter"
   
   while IFS= read -r key_mapping ; do
     key=$(echo "$key_mapping" | cut -d" " -f1 | sed "s/$delimiter/_/g")
