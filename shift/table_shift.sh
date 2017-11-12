@@ -2,7 +2,7 @@
 
 #. ../common.sh
 
-generate_mapping() {
+table_shift::generate_mapping() {
   local input="$1"
   local delimiter="$2"
   local key_collumns="$3"
@@ -20,12 +20,11 @@ generate_mapping() {
   done <<< "$keys"
 }
 
-generate_header() {
+table_shift::generate_header() {
   local input="$1"
   local delimiter="$2"
   local key_collumns="$3"
-  mapping=$(generate_mapping "$input" "$delimiter" "$key_collumns")
-#  echo "$mapping" >&2
+  mapping=$(table_shift::generate_mapping "$input" "$delimiter" "$key_collumns")
   first_key_collumn=$(echo "$key_collumns" | cut -d"," -f1 )
   
   for (( i=1; i<first_key_collumn; i++))
@@ -39,6 +38,25 @@ generate_header() {
     key=$(echo "$key_mapping" | cut -d" " -f1 | sed "s/$delimiter/_/g")
     printf "%s%s" "${delimiter}${key}"
   done <<< "$mapping"
+}
+
+table_shift::shift_collumns() {
+  local input="$1"
+  local delimiter="$2"
+  local key_collumns="$3"
+  mapping=$(table_shift::generate_mapping "$input" "$delimiter" "$key_collumns")
+
+  echo "$input" | sed -f <(echo "$mapping" | sed 's/=> //;s# #/#;s#$#/#;s#^#s/#')
+}
+
+table_shift::transpose() {
+  local input="$1"
+  local delimiter="$2"
+  local key_collumns="$3"
+  header=$(table_shift::generate_header "$input" "$delimiter" "$key_collumns")
+  shifted=$(table_shift::shift_collumns "$input" "$delimiter" "$key_collumns")
+  echo "$header"
+  echo "$shifted"
 }
 
 

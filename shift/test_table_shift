@@ -21,7 +21,7 @@ d:e:6
 
 
   # when
-  actual=$(generate_mapping "$input" ":" "1,2")
+  actual=$(table_shift::generate_mapping "$input" ":" "1,2")
 
 
   # then
@@ -43,7 +43,7 @@ test_should_based_mapping_on_key_collumns_only() {
 
 
   # when
-  actual=$(generate_mapping "$input" "@" "2,3,4")
+  actual=$(table_shift::generate_mapping "$input" "@" "2,3,4")
 
 
   # then
@@ -67,7 +67,7 @@ test_should_generate_header() {
 
 
   # when
-  actual=$(generate_header "$input" ":" "3,4")
+  actual=$(table_shift::generate_header "$input" ":" "3,4")
 
 
   # then
@@ -91,10 +91,33 @@ test_should_shift_collumns() {
 0:z2::::5
 0:z2::::::6"
 
-  mapping=$(generate_mapping "$input" ":" "3,4")
-  actual=$(echo "$input" | sed -f <(echo "$mapping" | sed 's/=> //;s# #/#;s#$#/#;s#^#s/#'))
+  actual=$(table_shift::shift_collumns "$input" ":" "3,4")
 
   assertEquals "$expected" "$actual"
+}
+
+
+test_should_generate_header_and_collumns() {
+
+  input="foo:0:z1:X::a:b:1
+bar:0:z1:X::a:c:2:5.1
+baz:0:z1:X::a:b:3:7.1
+Qux:0:z1:X::b:c:4:8.1
+qux:0:z2:X::a:c:5:9.2
+quux:0:z2:X::d:e:6:10.2"
+
+  expected="::::z1_X__a_b:z1_X__a_c:z1_X__b_c:z2_X__a_c:z2_X__d_e
+foo:0:::1
+bar:0::::2:5.1
+baz:0:::3:7.1
+Qux:0:::::4:8.1
+qux:0::::::5:9.2
+quux:0:::::::6:10.2"
+
+  actual=$(table_shift::transpose "$input" ":" "3,4,5,6,7")
+
+  assertEquals "$expected" "$actual"
+
 }
 
 . shunit2
