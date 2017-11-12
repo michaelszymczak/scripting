@@ -2,6 +2,11 @@
 
 #. ../common.sh
 
+
+generate_header() {
+  echo ":::a_b:a_c:b_c:d_e"
+}
+
 generate_mapping() {
   local input="$1"
   local delimiter="$2"
@@ -19,6 +24,7 @@ generate_mapping() {
     line_num=$((line_num + 1))
   done <<< "$keys"
 }
+
 
 
 # ######################################################################

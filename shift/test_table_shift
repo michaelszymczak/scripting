@@ -2,6 +2,8 @@
 
 . ./table_shift.sh
 
+
+
 ##############################
 
 
@@ -30,10 +32,47 @@ d:e => ::::"
   assertEquals "$expected" "$actual"
 }
 
+test_should_based_mapping_on_key_collumns_only() {
 
-#test_should_generate_header() {
-#
-#}
+  # given
+  input="
+1@z@a@b@1
+2@z@a@c@2
+5@z@a@b@3
+"
+
+
+  # when
+  actual=$(generate_mapping "$input" "@" "2,3,4")
+
+
+  # then
+  expected="z@a@b => @
+z@a@c => @@"
+  assertEquals "$expected" "$actual"
+}
+
+
+
+test_should_generate_header() {
+  # given
+  input="
+a:b:1
+a:c:2
+a:b:3
+b:c:4
+a:c:5
+d:e:6
+"
+
+
+  # when
+  actual=$(generate_header "$input" ":" "1,2")
+
+
+  # then
+  assertEquals ":::a_b:a_c:b_c:d_e" "$actual"
+}
 
 
 test_should_shift_collumns() {
