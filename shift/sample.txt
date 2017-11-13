@@ -1,0 +1,6 @@
+foo:1:z1:X::a:b:1
+bar:3:z1:X::a:c:2
+baz:5:z1:X::a:b:3
+Qux:7:z1:X::b:c:4
+qux:11:z2:X::a:c:5
+quux:15:z2:X::d:e:6

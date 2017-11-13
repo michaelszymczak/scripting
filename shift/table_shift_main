@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+. table_shift/table_shift.sh
+
+main() {
+  local file_to_process="$1"
+  local delimiter="$2"
+  local key_collumns="$3"
+  local input
+  
+  input=$(<"$file_to_process")
+  
+  table_shift::transpose "$input" "$delimiter" "$key_collumns"
+}
+
+main "$@"
+
+
+
